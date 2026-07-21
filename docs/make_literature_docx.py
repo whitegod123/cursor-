@@ -50,7 +50,7 @@ SECTIONS = [
              "（几何参数与排量关系的早期系统论述）", False),
         ],
         [  # 英文
-            ("Zheng L., Wu X., Han G., et al. Analytical Model for the Flow in Progressing "
+            ("Zheng L., Wu X., Han G., Li H., Zuo Y., Zhou D. Analytical Model for the Flow in Progressing "
              "Cavity Pump with the Metallic Stator and Rotor in Clearance Fit[J]. "
              "Mathematical Problems in Engineering, 2018. DOI: 10.1155/2018/3696930 "
              "（理论排量公式 q=4eDT，即本模型 PumpGeometry 的直接出处）", True),
@@ -101,7 +101,7 @@ SECTIONS = [
              "请以知网/万方原文核实）", False),
         ],
         [
-            ("Zheng L., Wu X., Han G., et al. Analytical Model for the Flow in Progressing "
+            ("Zheng L., Wu X., Han G., Li H., Zuo Y., Zhou D. Analytical Model for the Flow in Progressing "
              "Cavity Pump with the Metallic Stator and Rotor in Clearance Fit[J]. "
              "Mathematical Problems in Engineering, 2018. DOI: 10.1155/2018/3696930 "
              "（式(35) Q=Qt−Qs、式(36) ηv=Q/Qt，本模型主公式出处；开放获取）", True),
