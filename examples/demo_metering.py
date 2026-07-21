@@ -12,6 +12,10 @@
 
 import math
 import random
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from espcp_metering import (
     DigitalMeteringModel,
@@ -44,8 +48,10 @@ def main() -> None:
     )
 
     # ── 3. 单量测试数据标定漏失模型 ───────────────────────────
-    # 演示用：以"真值"系数正向生成测试数据并叠加 2% 计量噪声，
+    # 演示用：以"真值"系数正向生成测试数据并叠加 0.5% 计量噪声，
     # 实际使用时把 records 换成现场单量测试记录即可。
+    # 注意：产液量的计量噪声会放大映射到漏失量上（漏失仅占总量的
+    # 小部分），因此单量测试的精度直接决定标定质量。
     k_dp_true, k_sh_true = 1.5e-7, 0.008
     rng = random.Random(42)
     records = []
@@ -60,7 +66,7 @@ def main() -> None:
         mu = viscosity.viscosity_pas(t_c)
         qs = k_dp_true * dp_mpa * MPA / mu + k_sh_true * n
         qt = geometry.theoretical_rate_m3d(n)
-        q_meas = (qt - qs) * (1.0 + rng.gauss(0.0, 0.02))
+        q_meas = (qt - qs) * (1.0 + rng.gauss(0.0, 0.005))
         records.append(TestRecord(q_meas, dp_mpa * MPA, t_c, n))
 
     slippage = SlippageCalibrator(geometry, viscosity).fit(

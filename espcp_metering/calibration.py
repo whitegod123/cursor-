@@ -27,12 +27,16 @@ from espcp_metering.viscosity import ViscosityModel
 class TestRecord:
     """一次单量测试记录。
 
+    注：类名以 Test 开头，声明 __test__ = False 防止 pytest 误收集。
+
     Attributes:
         measured_rate_m3d: 实测产液量 [m^3/d]
         total_dp_pa: 泵压差（排出口-吸入口）[Pa]
         temperature_c: 泵挂处井温 [°C]
         speed_rpm: 泵转速 [r/min]
     """
+
+    __test__ = False
 
     measured_rate_m3d: float
     total_dp_pa: float
