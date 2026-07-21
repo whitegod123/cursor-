@@ -28,17 +28,11 @@ SECTIONS = [
         "不收录自转/公转、啮合点速度、位移-速度-加速度等纯运动学分析文献"
         "（那些服务于强度/振动/磨损分析，不进计产公式）。",
         [  # 中文
-            ("《单螺杆泵的性能与结构》（工程设计资料）. 理论排液量 Vth=4eDRT、理论流量 "
-             "Qv=Vth·n、实际流量 qv=Qv·ηv（ηv=0.65~0.85）；并给出\"由所需流量反算 D、e、T\" "
-             "的设计方法——与本研究计产公式 Qt=qn 完全一致的工程表达。", False),
-            ("《螺杆泵的具体流量以什么为规范》（行业技术资料）. 理论流量 "
-             "Q1=4eDTn（每秒），并给出黏度修正系数 K_Q 对理论流量的修正方法——"
-             "修正系数思路与本研究标定系数 k_dp、k_sh 同构。", False),
-            ("偏心距对类椭圆形采油螺杆泵举升性能的影响[J]. 化工机械, 2025. "
+            ("[待核实作者/期号] 偏心距对类椭圆形采油螺杆泵举升性能的影响[J]. 化工机械. "
              "有限元方法计算不同偏心距 e 下的排量 q 与临界接触应力/扬程，"
-             "为按产量/扬程需求反选几何参数提供依据——即\"目标产量→几何参数\"的反算路径。",
-             False),
-            ("(作者见原文) 全金属螺杆泵工作特性试验模拟与评价[J]. 石油机械, 2018. "
+             "为按产量/扬程需求反选几何参数提供依据——即\"目标产量→几何参数\"的反算路径。"
+             "（篇名经网络检索获得，卷期号与年份需在知网/万方以篇名核实）", False),
+            ("[待核实作者] 全金属螺杆泵工作特性试验模拟与评价[J]. 石油机械, 2018. "
              "提出间隙配合方式下理论排量的修正计算式 Qt=α·A0·T·n（α 为间隙修正系数），"
              "并据此给出\"按产能要求选泵规格与级数\"的举升设计方法。", False),
             ("郑磊, 吴晓东, 韩国庆, 徐军, 史殊哲, 李准. 全金属螺杆泵间隙漏失模型[J]. "
@@ -57,22 +51,21 @@ SECTIONS = [
              "Cavity Pump with the Metallic Stator and Rotor in Clearance Fit[J]. "
              "Mathematical Problems in Engineering, 2018. DOI: 10.1155/2018/3696930 "
              "（理论排量公式 q=4eDT，即本模型 PumpGeometry 的直接出处）", True),
-            ("Nguyen T., Al-Safran E., et al. Modeling the design and performance of "
-             "progressing cavity pump using 3-D vector approach[J]. Journal of Petroleum "
-             "Science and Engineering, 2014. DOI: 10.1016/j.petrol.2014.05.021 "
+            ("Nguyen T., Al-Safran E., Saasen A., Nes O.-M. Modeling the design and "
+             "performance of progressing cavity pump using 3-D vector approach[J]. "
+             "Journal of Petroleum Science and Engineering, 2014, 122: 180-186. "
+             "DOI: 10.1016/j.petrol.2014.07.009 "
              "（泵因数 Fp=AF·Ps、产量 Q=Fp·ω 的严格推导，多头泵推广；流量面积 "
              "AF=2πe²(N−2)+4de）", True),
-            ("(作者见原文) Modeling the performance of progressive cavity pump under "
-             "downhole conditions[J]. Journal of Petroleum Science and Engineering, 2020. "
+            ("Nguyen K., Nguyen T., Al-Safran E. Modeling the performance of progressive "
+             "cavity pump under downhole conditions[J]. Journal of Petroleum Science and "
+             "Engineering, 2020. DOI: 10.1016/j.petrol.2020.108121 "
              "式(9) Qa=理论产量−总滑失，将流量面积与导程直接代入实际产量计算，"
              "覆盖单头与多头泵。", False),
-            ("(作者见原文) Experimental and CFD modelling of a Progressive Cavity Pump "
+            ("[待核实作者] Experimental and CFD modelling of a Progressive Cavity Pump "
              "using overset unstructured mesh[C]. E3S Web of Conferences, ICCHMT 2021. "
              "综述并应用 Nguyen(2014) 泵因数模型与滑失模型联合预测产量性能，"
              "CFD 与实验误差 <10%。", False),
-            ("Progressing Cavity Pump Guide and Design（工程设计指南）. "
-             "\"Flow rate is directly proportional to rotational speed\" —— 产量与转速"
-             "线性关系的工程表述，泵级数、压差、产量范围的选型依据。", False),
             ("Saveth K.J., Klein S.T. The Progressing Cavity Pump: Principle and "
              "Capabilities[C]. SPE 18873, 1989. （PCP 排量原理与产能范围的经典综述）", False),
             ("Moineau R. A New Capsulism[D]. PhD Thesis, University of Paris, 1930. "
@@ -104,23 +97,24 @@ SECTIONS = [
              "Cavity Pump with the Metallic Stator and Rotor in Clearance Fit[J]. "
              "Mathematical Problems in Engineering, 2018. DOI: 10.1155/2018/3696930 "
              "（式(35) Q=Qt−Qs、式(36) ηv=Q/Qt，本模型主公式出处；开放获取）", True),
-            ("(Olivet A. 等，署名以原文为准) New Approach for Modeling Progressive Cavity "
+            ("Gamboa J., Olivet A., Espin S. New Approach for Modeling Progressive Cavity "
              "Pumps Performance[C]. SPE 84137, 2003. DOI: 10.2118/84137-MS "
              "（滑失分解为压差分量+转子运动分量，标定式结构出处）", True),
             ("Pessoa P.A.S., Paladino E.E., de Lima J.A. A Simplified Model for the Flow in "
              "a Progressive Cavity Pump[C]. COBEM 2009, COB09-1951. "
              "（漏失∝w³Δp/μ；湍流时漏失∝Δp^n, n<1；免费 PDF）", True),
-            ("(作者见原文) Leakage flow correlation of a progressive cavity pump delivering "
+            ("Mrinal K.R., Samad A. Leakage flow correlation of a progressive cavity pump delivering "
              "shear thinning non-Newtonian fluids[J]. Int. J. Oil, Gas and Coal Technology, "
-             "2017. DOI: 10.1504/IJOGCT.2017.086299 （实验回归漏失量的方法学）", True),
+             "2017, 16(2): 166-186. DOI: 10.1504/IJOGCT.2017.086299 （实验回归漏失量的方法学）",
+             True),
             ("Paladino E.E., Lima J.A., Pessoa P.A.S., Almeida R.F.C. A computational model "
              "for the flow within rigid stator progressing cavity pumps[J]. Journal of "
              "Petroleum Science and Engineering, 2011, 78(1): 178-192. "
              "DOI: 10.1016/j.petrol.2011.05.008 （三维瞬态 CFD；级间压差不均的证据）", True),
-            ("(作者见原文) A 3D Transient Model for the Multiphase Flow in a "
+            ("[待核实作者] A 3D Transient Model for the Multiphase Flow in a "
              "Progressing-Cavity Pump[J]. SPE Journal. DOI: 10.2118/178924-PA "
              "（含气两相流下的漏失与容积效率）", False),
-            ("(作者见原文) Study on performance of progressing cavity pumps (PCPs) in "
+            ("[待核实作者] Study on performance of progressing cavity pumps (PCPs) in "
              "different fit modes[C/J]. 2020. （过盈/间隙两种配合的容积特性统一表达；"
              "ResearchGate 免费）", False),
             ("Andrade S.F.A., et al. Asymptotic Model of the 3D Flow in a Progressing-Cavity "
@@ -155,19 +149,19 @@ SECTIONS = [
              "（抽油杆柱负载扭矩试验与计算、能耗特征分析；知网检索篇名）", False),
         ],
         [
-            ("(作者见原文) Complex Fluid Flow and Mechanical Modeling of Metal Progressing "
+            ("[待核实作者] Complex Fluid Flow and Mechanical Modeling of Metal Progressing "
              "Cavity Pumps PCP's[C]. SPE 150419, 2012. DOI: 10.2118/150419-MS "
              "（金属泵流动+力学联合建模，应力应变与寿命预测）", False),
-            ("(作者见原文) Simulation of the operating characteristics of an all-metal "
+            ("[待核实作者] Simulation of the operating characteristics of an all-metal "
              "conical screw pump[J]. Scientific Reports, 2025. "
              "DOI: 10.1038/s41598-025-28519-z （扭矩、能效随间隙与转速的变化规律；开放获取）",
              False),
-            ("(作者见原文) Study on performance of progressing cavity pumps (PCPs) in "
+            ("[待核实作者] Study on performance of progressing cavity pumps (PCPs) in "
              "different fit modes[C/J]. 2020. （功率消耗与机械效率对比：过盈摩擦 vs 间隙漏失）",
              False),
-            ("(作者见原文) Design of Progressive Cavity Pump Wells[C]. SPE 113324, 2008. "
+            ("[待核实作者] Design of Progressive Cavity Pump Wells[C]. SPE 113324, 2008. "
              "（泵扬程、转速与扭矩的设计计算关系式；Academia.edu 可免费获取）", False),
-            ("(作者见原文) A 3D Transient Model for the Multiphase Flow in a "
+            ("[待核实作者] A 3D Transient Model for the Multiphase Flow in a "
              "Progressing-Cavity Pump[J]. SPE Journal. DOI: 10.2118/178924-PA "
              "（黏性损耗的精确预测，轴功率组成）", False),
             ("Paladino E.E., et al. A computational model for the flow within rigid stator "
@@ -182,10 +176,10 @@ SECTIONS = [
         [
             ("魏纪德, 吴文祥, 曾艳. 螺杆泵定子橡胶溶胀对容积效率的影响及对策[J]. 石油机械, "
              "2005, 33(4): 16-18. （溶胀退化修正）", False),
-            ("(作者见原文) 全金属螺杆泵工作特性试验模拟与评价[J]. 石油机械, 2018. "
+            ("[待核实作者] 全金属螺杆泵工作特性试验模拟与评价[J]. 石油机械, 2018. "
              "（理论排量修正计算方法；容积损失与机械损失随压差/转速的相反趋势；期刊官网免费）",
              False),
-            ("(作者见原文) 全金属螺杆泵定转子配合优化及特性试验研究[J]. 石油机械, 2018. "
+            ("[待核实作者] 全金属螺杆泵定转子配合优化及特性试验研究[J]. 石油机械, 2018. "
              "（温度→定转子变形→间隙变化→泵效；最佳间隙 0.1~0.3 mm；期刊官网免费）", False),
             ("学位论文（硕士）. 螺杆泵井生产系统参数优化设计. "
              "（气体影响/漏失影响/综合影响三种容积效率公式，章节结构可作写作模板；"
@@ -201,15 +195,15 @@ SECTIONS = [
              "（溶胀对容积效率影响章节、定子温度场有限元分析；亦列于第三部分）", False),
         ],
         [
-            ("(作者见原文) Modeling the performance of progressive cavity pump under "
+            ("[待核实作者] Modeling the performance of progressive cavity pump under "
              "downhole conditions[J]. Journal of Petroleum Science and Engineering, 2020. "
              "（Hooke 定律+复合圆筒理论：井下压力温度→定子变形→间隙修正→漏失修正，"
              "最贴合\"修正模型\"概念，推荐精读）", False),
-            ("(作者见原文) Optimizing the Clearance Fit of a Progressive Cavity Pump for "
+            ("[待核实作者] Optimizing the Clearance Fit of a Progressive Cavity Pump for "
              "the Thermal Recovery of Petroleum Using Fluid–Structure Thermal Coupling[J]. "
              "ACS Omega, 2022. DOI: 10.1021/acsomega.2c03957 "
              "（流固热耦合计算容积效率，实验偏差<5%；开放获取）", False),
-            ("(作者见原文) A Computational Model for Analysis of Fluid-Structure "
+            ("[待核实作者] A Computational Model for Analysis of Fluid-Structure "
              "Interaction within Elastomeric Progressing Cavity Pumps[C]. SPE 165650, 2013. "
              "DOI: 10.2118/165650-MS （橡胶定子变形与流动的双向耦合）", False),
             ("Brinkman H.C. The viscosity of concentrated suspensions and solutions[J]. "
@@ -220,7 +214,7 @@ SECTIONS = [
              "（油包水乳状液黏度式 μm=μo·(1+2.5fw+14.1fw²)）", True),
             ("Woelflin W. The Viscosity of Crude-Oil Emulsions[C]. API Drilling and "
              "Production Practice, 1942. （采油工程乳状液黏度经典关系式）", False),
-            ("(作者见原文) A 3D Transient Model for the Multiphase Flow in a "
+            ("[待核实作者] A 3D Transient Model for the Multiphase Flow in a "
              "Progressing-Cavity Pump[J]. SPE Journal. DOI: 10.2118/178924-PA "
              "（含气修正依据；亦列于第二部分）", False),
         ],
@@ -262,10 +256,19 @@ def main() -> None:
 
     note = doc.add_paragraph()
     nr = note.add_run(
-        "说明：本清单服务于论文《电潜螺杆泵运行特性模型》章节（四个子模型各成一节）。"
-        "标注\"知网检索篇名\"的文献请在知网/万方以篇名精确检索获取；标注 DOI 的可通过 "
-        "doi.org 直达；部分英文文献作者署名请以原文为准。红色文献为已在数字计产模型代码"
-        "（espcp_metering / espcp_all_in_one.py）中作为公式依据引用的文献。"
+        "使用须知（务必阅读）：\n"
+        "① 标注 DOI 的期刊/会议论文均已通过 doi.org 或学术检索核实真实存在，可直达全文。\n"
+        "② 标注\"[待核实作者]\"表示：论文标题、期刊、年卷期、DOI 经检索确认真实存在，"
+        "但完整作者名单本工具未逐一核实，引用前请打开 DOI 链接确认作者信息。\n"
+        "③ 标注\"知网检索篇名\"的学位论文：标题信息来自第三方论文预览/代写网站"
+        "（如 51papers.com、abslw.com、ppdoc.com 等）的搜索结果摘要，本工具未直接在"
+        "中国知网/万方数据核实其真实存在性与作者信息。这类网站可信度有限，"
+        "引用前必须以篇名在知网/万方精确检索、确认原文存在后方可使用，"
+        "不可直接以本清单信息作为参考文献。\n"
+        "④ 红色标注文献为已在数字计产模型代码（espcp_metering / espcp_all_in_one.py）"
+        "中作为公式依据实际引用的文献，可信度已通过代码实现与数学自洽性验证交叉确认。\n"
+        "⑤ 本清单由 AI 辅助网络检索整理，属于文献线索汇总而非权威文献库，"
+        "所有条目使用前均须由使用者自行核实原文。"
     )
     nr.font.size = Pt(9)
     nr.font.color.rgb = GRAY
