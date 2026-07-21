@@ -60,19 +60,30 @@ SECTIONS = [
              "DOI: 10.1016/j.petrol.2014.07.009 "
              "（泵因数 Fp=AF·Ps、产量 Q=Fp·ω 的严格推导，多头泵推广；流量面积 "
              "AF=2πe²(N−2)+4de）", True),
-            ("Nguyen K., Nguyen T., Al-Safran E. Modeling the performance of progressive "
+            ("Nguyen K., Nguyen T.C., Al-Safran E. Modeling the performance of progressive "
              "cavity pump under downhole conditions[J]. Journal of Petroleum Science and "
-             "Engineering, 2020. DOI: 10.1016/j.petrol.2020.108121 "
-             "式(9) Qa=理论产量−总滑失，将流量面积与导程直接代入实际产量计算，"
-             "覆盖单头与多头泵。", False),
-            ("[待核实作者] Experimental and CFD modelling of a Progressive Cavity Pump "
-             "using overset unstructured mesh[C]. E3S Web of Conferences, ICCHMT 2021. "
-             "综述并应用 Nguyen(2014) 泵因数模型与滑失模型联合预测产量性能，"
-             "CFD 与实验误差 <10%。", False),
+             "Engineering, 2021, 198: 108121. DOI: 10.1016/j.petrol.2020.108121 "
+             "（发表信息：网络首发 2020 年，正式卷期为 2021 年 Vol.198，"
+             "按 2021 年检索更容易命中）. 式(9) Qa=理论产量−总滑失，将流量面积与导程直接代入"
+             "实际产量计算，覆盖单头与多头泵。", False),
+            ("Becerra D., Asuaje M., Zambrano A., Ratkovich N. Experimental and CFD "
+             "modelling of a Progressive Cavity Pump using overset unstructured mesh[C]. "
+             "E3S Web of Conferences, ICCHMT 2021, Vol. 321: 02014. "
+             "DOI: 10.1051/e3sconf/202132102014 （有免费 PDF 直链，见期刊官网 "
+             "e3s-conferences.org）. 综述并应用 Nguyen(2014) 泵因数模型与滑失模型联合预测"
+             "产量性能，CFD 与实验误差 <10%。", False),
             ("Saveth K.J., Klein S.T. The Progressing Cavity Pump: Principle and "
-             "Capabilities[C]. SPE 18873, 1989. （PCP 排量原理与产能范围的经典综述）", False),
-            ("Moineau R. A New Capsulism[D]. PhD Thesis, University of Paris, 1930. "
-             "（螺杆泵原理开山之作，理论排量 q=4eDT 思想的最初来源）", False),
+             "Capabilities[C]. SPE 18873, 1989. DOI: 10.2118/18873-MS "
+             "（SPE 会议论文，谷歌学术收录不完整，请到 OnePetro 或用 DOI 检索，"
+             "而非谷歌学术；PCP 排量原理与产能范围的经典综述）", False),
+            ("[存疑，建议转引] Moineau R. \"Le Nouveau Capsulisme\"（法文，英译 A New "
+             "Capsulism）[D]. 博士学位论文, University of Paris, 1930（有文献注明 1935）. "
+             "此为 1930 年代法文手稿，未见任何数字化版本或在线全文，全网及谷歌学术均查不到，"
+             "PCP 领域几乎所有引用该文献的论文本身也未接触过原文，均属\"转引\"。"
+             "不建议直接引用原文，可参照学术惯例改为转引格式，例如："
+             "\"Moineau (1930), 转引自 Paladino et al. (2011)\"，"
+             "或直接删除该条、仅在正文用一句话说明螺杆泵由 Moineau 于 1930 年提出即可。",
+             False),
         ],
     ),
     (
@@ -284,7 +295,12 @@ def main() -> None:
         "不可直接以本清单信息作为参考文献。\n"
         "④ 红色标注文献为已在数字计产模型代码（espcp_metering / espcp_all_in_one.py）"
         "中作为公式依据实际引用的文献，可信度已通过代码实现与数学自洽性验证交叉确认。\n"
-        "⑤ 本清单由 AI 辅助网络检索整理，属于文献线索汇总而非权威文献库，"
+        "⑤ SPE 会议论文谷歌学术收录不完整，请优先用 DOI 或 OnePetro（onepetro.org）检索，"
+        "不要仅依赖谷歌学术判断论文是否存在。\n"
+        "⑥ 标注\"[存疑，建议转引]\"的文献为年代久远、无数字化版本的历史文献"
+        "（如 Moineau 1930 原始博士论文），全网无法查到全文，本领域论文均通过转引方式"
+        "引用，请勿直接引用原文，按学术惯例改为转引格式或删除该条。\n"
+        "⑦ 本清单由 AI 辅助网络检索整理，属于文献线索汇总而非权威文献库，"
         "所有条目使用前均须由使用者自行核实原文。"
     )
     nr.font.size = Pt(9)
