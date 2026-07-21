@@ -12,12 +12,14 @@ from espcp_metering import (
     CalibratedSlippageModel,
     ClearanceGeometry,
     DigitalMeteringModel,
+    EmulsionViscosity,
     MechanisticSlippageModel,
     PowerModel,
     PumpGeometry,
     SlippageCalibrator,
     TestRecord,
     ViscosityTable,
+    WaterViscosity,
     WellSnapshot,
 )
 
@@ -87,6 +89,54 @@ class TestViscosity:
         table = ViscosityTable([50.0, 80.0], [1.0, 0.2])
         assert table.viscosity_pas(90.0) < 0.2
         assert table.viscosity_pas(40.0) > 1.0
+
+
+class TestWaterAndEmulsionViscosity:
+    def test_water_viscosity_reference_points(self) -> None:
+        water = WaterViscosity()
+        # 20°C 约 1.0 mPa·s，60°C 约 0.47 mPa·s
+        assert water.viscosity_pas(20.0) == pytest.approx(1.0e-3, rel=0.05)
+        assert water.viscosity_pas(60.0) == pytest.approx(0.47e-3, rel=0.05)
+
+    def test_water_viscosity_decreases_with_temperature(self) -> None:
+        water = WaterViscosity()
+        assert water.viscosity_pas(80.0) < water.viscosity_pas(40.0)
+
+    def test_high_water_cut_close_to_water(
+        self, viscosity: ArrheniusViscosity
+    ) -> None:
+        """高含水（水包油）时混合液黏度接近水而远低于油。"""
+        emulsion = EmulsionViscosity(oil_model=viscosity, water_cut=0.9)
+        mu_mix = emulsion.viscosity_pas(60.0)
+        mu_water = WaterViscosity().viscosity_pas(60.0)
+        mu_oil = viscosity.viscosity_pas(60.0)
+        assert mu_water < mu_mix < 2.0 * mu_water
+        assert mu_mix < 0.01 * mu_oil
+
+    def test_high_water_cut_insensitive_to_water_cut(
+        self, viscosity: ArrheniusViscosity
+    ) -> None:
+        """含水 85% 与 95% 的混合液黏度差别很小（<40%）。"""
+        mu85 = EmulsionViscosity(viscosity, 0.85).viscosity_pas(60.0)
+        mu95 = EmulsionViscosity(viscosity, 0.95).viscosity_pas(60.0)
+        assert abs(mu85 - mu95) / mu95 < 0.4
+
+    def test_low_water_cut_thickens_oil(self, viscosity: ArrheniusViscosity) -> None:
+        """油包水（低含水）时乳化增稠，混合液黏度高于纯油。"""
+        emulsion = EmulsionViscosity(oil_model=viscosity, water_cut=0.3)
+        assert emulsion.viscosity_pas(60.0) > viscosity.viscosity_pas(60.0)
+
+    def test_with_water_cut_returns_updated_model(
+        self, viscosity: ArrheniusViscosity
+    ) -> None:
+        emulsion = EmulsionViscosity(oil_model=viscosity, water_cut=0.8)
+        updated = emulsion.with_water_cut(0.92)
+        assert updated.water_cut == 0.92
+        assert updated.inversion_point == emulsion.inversion_point
+
+    def test_invalid_water_cut_rejected(self, viscosity: ArrheniusViscosity) -> None:
+        with pytest.raises(ValueError):
+            EmulsionViscosity(oil_model=viscosity, water_cut=1.2)
 
 
 class TestMechanisticSlippage:

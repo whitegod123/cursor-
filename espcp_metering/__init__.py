@@ -12,7 +12,12 @@
 """
 
 from espcp_metering.geometry import PumpGeometry
-from espcp_metering.viscosity import ArrheniusViscosity, ViscosityTable
+from espcp_metering.viscosity import (
+    ArrheniusViscosity,
+    EmulsionViscosity,
+    ViscosityTable,
+    WaterViscosity,
+)
 from espcp_metering.leakage import ClearanceGeometry, MechanisticSlippageModel
 from espcp_metering.calibration import (
     CalibratedSlippageModel,
@@ -29,7 +34,9 @@ from espcp_metering.metering import (
 __all__ = [
     "PumpGeometry",
     "ArrheniusViscosity",
+    "EmulsionViscosity",
     "ViscosityTable",
+    "WaterViscosity",
     "ClearanceGeometry",
     "MechanisticSlippageModel",
     "CalibratedSlippageModel",

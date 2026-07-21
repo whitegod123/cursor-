@@ -11,7 +11,7 @@
 | `geometry.py` | 几何排量模型：Qt = 4·e·D·T·n | 基础 |
 | `leakage.py` | 排量-漏失机理模型（压差 + 剪切缝隙流动） | 核心·机理骨架 |
 | `calibration.py` | 容积效率标定：Qs = k_dp·Δp^α/μ^β + k_sh·n，系数由单量测试数据最小二乘标定 | 核心·数据标定 |
-| `viscosity.py` | 黏温修正：Arrhenius 式或实测黏温曲线插值 | 修正 |
+| `viscosity.py` | 黏温修正：Arrhenius 式 / 实测黏温曲线插值 / 水黏度解析式 / 油水乳化液模型 | 修正 |
 | `power.py` | 扭矩-功率模型：电参数负载校核、压力计失效时反推压差 | 校核/备用 |
 | `metering.py` | 数字计产主模型（整合以上四者） | 主入口 |
 
@@ -64,6 +64,24 @@ result = model.estimate(WellSnapshot(
 ))
 print(result.rate_m3d, result.volumetric_efficiency)
 ```
+
+## 高含水油田用法
+
+含水率超过转相点（默认 0.6）后井液为水包油，混合液黏度接近水黏度，
+不需要化验黏温曲线，直接用 `EmulsionViscosity` 包裹油相模型即可：
+
+```python
+from espcp_metering import ArrheniusViscosity, EmulsionViscosity
+
+oil = ArrheniusViscosity.from_two_points(50.0, 1.0, 80.0, 0.12)  # 油相（低含水井才重要）
+liquid = EmulsionViscosity(oil_model=oil, water_cut=0.90)         # 化验含水率，月度更新即可
+# 含水率更新：liquid = liquid.with_water_cut(0.93)
+# 把 liquid 作为 viscosity_model 传给 SlippageCalibrator / CalibratedSlippageModel
+```
+
+注意：高含水下井液黏度低，漏失量占比显著增大，单量测试标定的质量
+更加关键；低黏度缝隙流可能进入湍流区，标定时建议启用
+`alpha_grid=(0.6, 0.8, 1.0)` 网格搜索。
 
 ## 单位约定
 
