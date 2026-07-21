@@ -1242,6 +1242,10 @@ def demo() -> None:
 
 
 if __name__ == "__main__":
+    # Windows 中文控制台（GBK）编不了 ³/η 等字符，强制 UTF-8 输出
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+        sys.stderr.reconfigure(encoding="utf-8", errors="replace")
     if len(sys.argv) >= 2 and sys.argv[1] == "web":
         serve(int(sys.argv[2]) if len(sys.argv) > 2 else 8000)
     elif len(sys.argv) >= 2 and sys.argv[1] == "demo":
