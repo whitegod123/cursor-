@@ -22,44 +22,61 @@ GRAY = RGBColor(0x59, 0x59, 0x59)
 # (文献条目, 是否已用于模型代码)
 SECTIONS = [
     (
-        "第一部分　几何与运动学模型",
-        "作用：型线方程、啮合运动学、理论排量 q = 4·e·D·T 与泵因数计算，一切模型的基础。",
+        "第一部分　几何与运动学模型（计产导向）",
+        "作用：型线/结构参数 → 理论排量 q=4eDT（或泵因数 Fp）→ 理论流量 Qt=qn，"
+        "是流量-漏失模型（第二部分）的直接输入。本节只收录\"参数-排量-产量\"这条链上的文献，"
+        "不收录自转/公转、啮合点速度、位移-速度-加速度等纯运动学分析文献"
+        "（那些服务于强度/振动/磨损分析，不进计产公式）。",
         [  # 中文
-            ("学位论文（博士）. 单螺杆泵螺杆—衬套副型线研究. （内摆线/短幅内摆线型线方程、"
-             "共轭副运动分析、参数计算与优化设计；知网博硕库检索篇名）", False),
-            ("学位论文（硕士）. 单螺杆泵的运动学仿真、有限元模拟及结构优化. "
-             "（螺杆/定子型线方程、密封腔运动学分析；知网检索篇名）", False),
-            ("学位论文（硕士）. 单螺杆泵运动学仿真及转子动力特性研究. "
-             "（转子自转与公转、啮合点速度分析；知网检索篇名）", False),
-            ("学位论文（硕士）. 单螺杆泵流场数值模拟及结构参数优化研究. "
-             "（型线理论、运动学特征、转子受液压力/转矩分析；知网检索篇名）", False),
-            ("单螺杆泵设计及特性试验研究[J].（维普收录；推导螺杆直径 D、导程 T、偏心距 e "
-             "计算公式，拟合容积效率计算式，完整设计方法）", False),
-            ("何存兴. 单螺杆泵设计中若干理论问题探讨[J]. 水泵技术, 1995(5): 3-10.", False),
-            ("周连考, 龚绍海, 赵继生. 单螺杆泵的设计与试验研究[J]. 水泵技术, 1999(3): 19-25.", False),
-            ("Moineau 理论在油田抽油螺杆泵设计中的应用[J]. 哈尔滨工程大学学报, 2000, "
-             "21(4): 85-89.", False),
+            ("《单螺杆泵的性能与结构》（工程设计资料）. 理论排液量 Vth=4eDRT、理论流量 "
+             "Qv=Vth·n、实际流量 qv=Qv·ηv（ηv=0.65~0.85）；并给出\"由所需流量反算 D、e、T\" "
+             "的设计方法——与本研究计产公式 Qt=qn 完全一致的工程表达。", False),
+            ("《螺杆泵的具体流量以什么为规范》（行业技术资料）. 理论流量 "
+             "Q1=4eDTn（每秒），并给出黏度修正系数 K_Q 对理论流量的修正方法——"
+             "修正系数思路与本研究标定系数 k_dp、k_sh 同构。", False),
+            ("偏心距对类椭圆形采油螺杆泵举升性能的影响[J]. 化工机械, 2025. "
+             "有限元方法计算不同偏心距 e 下的排量 q 与临界接触应力/扬程，"
+             "为按产量/扬程需求反选几何参数提供依据——即\"目标产量→几何参数\"的反算路径。",
+             False),
+            ("(作者见原文) 全金属螺杆泵工作特性试验模拟与评价[J]. 石油机械, 2018. "
+             "提出间隙配合方式下理论排量的修正计算式 Qt=α·A0·T·n（α 为间隙修正系数），"
+             "并据此给出\"按产能要求选泵规格与级数\"的举升设计方法。", False),
+            ("郑磊, 吴晓东, 韩国庆, 徐军, 史殊哲, 李准. 全金属螺杆泵间隙漏失模型[J]. "
+             "石油科学通报, 2018, 3(3): 320-331. 由结构参数计算单转理论排量（如 "
+             "77.3 mL/r），并作为漏失修正前的产量基准与 Gamboa 实测数据对比验证。", True),
             ("钟功祥, 雷鹏燕, 祝令闯. 全金属单螺杆油泵工作性能的全参数分析[J]. "
              "西南石油大学学报(自然科学版), 2020, 42(3): 161-169. "
-             "（偏心距/导程/间隙等几何参数对性能的影响）", False),
+             "偏心距、导程、间隙等几何参数对排量与产量的敏感性分析。", False),
+            ("单螺杆泵设计及特性试验研究[J].（维普收录）. 由目标流量、容积效率反算螺杆直径 D、"
+             "导程 T、偏心距 e 的完整设计方法，设计实例验证。", False),
+            ("何存兴. 单螺杆泵设计中若干理论问题探讨[J]. 水泵技术, 1995(5): 3-10. "
+             "（几何参数与排量关系的早期系统论述）", False),
         ],
         [  # 英文
-            ("Moineau R. A New Capsulism[D]. PhD Thesis, University of Paris, 1930. "
-             "（螺杆泵原理开山之作，理论排量思想的源头）", False),
+            ("Zheng L., Wu X., Han G., et al. Analytical Model for the Flow in Progressing "
+             "Cavity Pump with the Metallic Stator and Rotor in Clearance Fit[J]. "
+             "Mathematical Problems in Engineering, 2018. DOI: 10.1155/2018/3696930 "
+             "（理论排量公式 q=4eDT，即本模型 PumpGeometry 的直接出处）", True),
             ("Nguyen T., Al-Safran E., et al. Modeling the design and performance of "
              "progressing cavity pump using 3-D vector approach[J]. Journal of Petroleum "
-             "Science and Engineering, 2014. DOI: 10.1016/j.petrol.2014.05.021", True),
+             "Science and Engineering, 2014. DOI: 10.1016/j.petrol.2014.05.021 "
+             "（泵因数 Fp=AF·Ps、产量 Q=Fp·ω 的严格推导，多头泵推广；流量面积 "
+             "AF=2πe²(N−2)+4de）", True),
+            ("(作者见原文) Modeling the performance of progressive cavity pump under "
+             "downhole conditions[J]. Journal of Petroleum Science and Engineering, 2020. "
+             "式(9) Qa=理论产量−总滑失，将流量面积与导程直接代入实际产量计算，"
+             "覆盖单头与多头泵。", False),
+            ("(作者见原文) Experimental and CFD modelling of a Progressive Cavity Pump "
+             "using overset unstructured mesh[C]. E3S Web of Conferences, ICCHMT 2021. "
+             "综述并应用 Nguyen(2014) 泵因数模型与滑失模型联合预测产量性能，"
+             "CFD 与实验误差 <10%。", False),
+            ("Progressing Cavity Pump Guide and Design（工程设计指南）. "
+             "\"Flow rate is directly proportional to rotational speed\" —— 产量与转速"
+             "线性关系的工程表述，泵级数、压差、产量范围的选型依据。", False),
             ("Saveth K.J., Klein S.T. The Progressing Cavity Pump: Principle and "
-             "Capabilities[C]. SPE 18873, 1989. （PCP 原理与能力的经典综述）", False),
-            ("(作者见原文) Viscous flow simulations through multi-lobe progressive cavity "
-             "pumps[J]. Petroleum Science, 2020. DOI: 10.1007/s12182-020-00458-6 "
-             "（内摆线理论、多头泵几何与无量纲参数组）", False),
-            ("Andrade S.F.A., Valério J.V., Carvalho M.S. Asymptotic Model of the 3D Flow "
-             "in a Progressing-Cavity Pump[J]. SPE Journal, 2011, 16(2): 451-462. "
-             "DOI: 10.2118/142294-PA", False),
-            ("Paladino E.E., Lima J.A., Almeida R.F.C., Assmann B.W. Computational Modeling "
-             "of the Three-Dimensional Flow in a Metallic Stator Progressing Cavity Pump[C]. "
-             "SPE 114110, 2008. DOI: 10.2118/114110-MS （基于运动学的网格运动建模）", False),
+             "Capabilities[C]. SPE 18873, 1989. （PCP 排量原理与产能范围的经典综述）", False),
+            ("Moineau R. A New Capsulism[D]. PhD Thesis, University of Paris, 1930. "
+             "（螺杆泵原理开山之作，理论排量 q=4eDT 思想的最初来源）", False),
         ],
     ),
     (
