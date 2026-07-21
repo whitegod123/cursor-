@@ -10,7 +10,12 @@
 输出：docs/电潜螺杆泵运行特性模型文献清单.docx
 """
 
+import re
+from urllib.parse import quote
+
 from docx import Document
+from docx.oxml.ns import qn
+from docx.oxml import OxmlElement
 from docx.shared import Pt, RGBColor
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 
@@ -18,6 +23,124 @@ PURPLE = RGBColor(0x70, 0x30, 0xA0)
 RED = RGBColor(0xC0, 0x00, 0x00)
 BLACK = RGBColor(0x00, 0x00, 0x00)
 GRAY = RGBColor(0x59, 0x59, 0x59)
+LINK_BLUE = RGBColor(0x05, 0x63, 0xC1)
+
+# 已核实的直达全文/官方链接（按标题中的唯一子串匹配）
+MANUAL_URLS = {
+    "偏心距对类椭圆形": ("http://www.knowcat.cn/p/20250507/2494418.html", "search"),
+    "全金属螺杆泵工作特性试验模拟与评价": ("https://html.rhhz.net/syjxzz/html/20180513.htm", "direct"),
+    "全金属螺杆泵间隙漏失模型": (
+        "https://cup.edu.cn/pub/sykxtb/docs/2018-09/20180919112021023818.pdf",
+        "direct",
+    ),
+    "全金属单螺杆油泵工作性能的全参数分析": (
+        "https://html.rhhz.net/XNSYDXXBZRB/HTML/2020-3-161.htm",
+        "direct",
+    ),
+    "单螺杆泵设计及特性试验研究": (
+        "http://dianda.cqvip.com/Qikan/Article/Detail?from=Qikan_Search_Index&id=26642316",
+        "direct",
+    ),
+    "全金属螺杆泵漏失规律及配合间隙优化研究": (
+        "https://html.rhhz.net/syjxzz/html/20190316.htm",
+        "direct",
+    ),
+    "全金属螺杆泵定转子配合优化及特性试验研究": (
+        "https://html.rhhz.net/syjxzz/html/20180214.htm",
+        "direct",
+    ),
+    "地面驱动螺杆泵抽油杆柱负载扭矩的计算": (
+        "https://max.book118.com/html/2015/0825/24002417.shtm",
+        "search",
+    ),
+    "地面驱动螺杆泵抽油杆柱动力学分析技术及其应用": (
+        "https://www.syxb-cps.com.cn/CN/Y2005/V26/I1/121",
+        "direct",
+    ),
+    "A Simplified Model for the Flow in": (
+        "https://www.abcm.org.br/anais/cobem/2009/pdf/COB09-1951.pdf",
+        "direct",
+    ),
+    "Experimental and CFD modelling of a Progressive Cavity Pump": (
+        "https://www.e3s-conferences.org/articles/e3sconf/pdf/2021/97/"
+        "e3sconf_icchmt2021_02014.pdf",
+        "direct",
+    ),
+    "Optimizing the Clearance Fit of a Progressive Cavity Pump": (
+        "https://pmc.ncbi.nlm.nih.gov/articles/PMC9476504/",
+        "direct",
+    ),
+    "Design of Progressive Cavity Pump Wells": (
+        "https://www.academia.edu/34221900/SPE_113324_Design_of_Progressive_Cavity_Pump_Wells",
+        "direct",
+    ),
+    "Study on performance of progressing cavity pumps (PCPs) in": (
+        "https://doi.org/10.22399/ijcesen.474462",
+        "direct",
+    ),
+}
+
+_DOI_RE = re.compile(r"DOI[:：]\s*([^\s（(]+)")
+
+
+def resolve_url(text: str) -> tuple[str, str] | None:
+    """返回 (url, kind)，kind 为 'direct'（直达全文/官网）或 'search'（检索链接，
+    非直达全文，需自行在结果中确认）。查不到任何线索时返回 None。
+    """
+    for key, (url, kind) in MANUAL_URLS.items():
+        if key in text:
+            return url, kind
+
+    m = _DOI_RE.search(text)
+    if m:
+        doi = m.group(1).rstrip(".,，。")
+        return f"https://doi.org/{doi}", "direct"
+
+    if "[存疑，建议转引]" in text or "Moineau" in text:
+        return None
+
+    # 提取标题作为检索关键词（取"]. "之前的部分，去掉作者与待核实标记）
+    title_part = text
+    for tag in ("[待核实作者/期号] ", "[待核实作者] ", "[存疑，建议转引] "):
+        title_part = title_part.replace(tag, "")
+    match = re.search(r"^(?:[^.]+\. )?(.+?)[\[［]", title_part)
+    query = match.group(1).strip() if match else title_part[:40]
+    is_chinese = bool(re.search(r"[\u4e00-\u9fff]", query))
+    if is_chinese:
+        return f"https://xueshu.baidu.com/s?wd={quote(query)}", "search"
+    return f"https://scholar.google.com/scholar?q={quote(query)}", "search"
+
+
+def add_hyperlink(paragraph, url: str, display_text: str) -> None:
+    """在段落末尾插入真正可点击的超链接（python-docx 无原生 API，手工构造 XML）。"""
+    part = paragraph.part
+    r_id = part.relate_to(
+        url, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink",
+        is_external=True,
+    )
+    hyperlink = OxmlElement("w:hyperlink")
+    hyperlink.set(qn("r:id"), r_id)
+
+    new_run = OxmlElement("w:r")
+    rpr = OxmlElement("w:rPr")
+
+    color = OxmlElement("w:color")
+    color.set(qn("w:val"), "0563C1")
+    rpr.append(color)
+    underline = OxmlElement("w:u")
+    underline.set(qn("w:val"), "single")
+    rpr.append(underline)
+    sz = OxmlElement("w:sz")
+    sz.set(qn("w:val"), "21")  # 10.5pt
+    rpr.append(sz)
+
+    new_run.append(rpr)
+    text_elem = OxmlElement("w:t")
+    text_elem.set(qn("xml:space"), "preserve")
+    text_elem.text = display_text
+    new_run.append(text_elem)
+    hyperlink.append(new_run)
+    paragraph._p.append(hyperlink)
 
 # (文献条目, 是否已用于模型代码)
 SECTIONS = [
@@ -263,6 +386,18 @@ def add_entry(doc: Document, idx: int, text: str, used: bool) -> None:
         tag.font.bold = True
         tag.font.color.rgb = RED
 
+    resolved = resolve_url(text)
+    if resolved is None:
+        none_run = p.add_run("　［无可用链接，需自行查证］")
+        none_run.font.size = Pt(9.5)
+        none_run.font.italic = True
+        none_run.font.color.rgb = GRAY
+    else:
+        url, kind = resolved
+        p.add_run("　")
+        label = "🔗 全文链接" if kind == "direct" else "🔎 检索链接（非直达全文）"
+        add_hyperlink(p, url, label)
+
 
 def main() -> None:
     doc = Document()
@@ -301,7 +436,12 @@ def main() -> None:
         "（如 Moineau 1930 原始博士论文），全网无法查到全文，本领域论文均通过转引方式"
         "引用，请勿直接引用原文，按学术惯例改为转引格式或删除该条。\n"
         "⑦ 本清单由 AI 辅助网络检索整理，属于文献线索汇总而非权威文献库，"
-        "所有条目使用前均须由使用者自行核实原文。"
+        "所有条目使用前均须由使用者自行核实原文。\n"
+        "⑧ 每条文献末尾均附可点击链接，分两种：\"🔗 全文链接\"为已核实的期刊官网/"
+        "DOI/开放获取直链，点击可直达全文或摘要页；\"🔎 检索链接\"为按标题生成的"
+        "谷歌学术/百度学术搜索结果页，不是直达全文，需在搜索结果中自行确认并选择"
+        "可信来源（如知网/万方/期刊官网），不要直接使用搜索页里的第三方镜像站；"
+        "标注\"［无可用链接，需自行查证］\"的条目（如 Moineau 1930）全网确无可查资源。"
     )
     nr.font.size = Pt(9)
     nr.font.color.rgb = GRAY
