@@ -297,6 +297,73 @@ class TestPowerModel:
         assert not power.load_check_ok(p_elec * 1.5, n, dp)
 
 
+class TestWebApi:
+    def _payload(self) -> dict:
+        return {
+            "geometry": {
+                "eccentricity_m": 0.004,
+                "rotor_diameter_m": 0.040,
+                "stator_lead_m": 0.200,
+                "stages": 24,
+            },
+            "viscosity": {
+                "water_cut": 0.9,
+                "inversion_point": 0.6,
+                "t1_c": 50.0,
+                "mu1_pas": 1.0,
+                "t2_c": 80.0,
+                "mu2_pas": 0.12,
+            },
+            "power": {
+                "motor_efficiency": 0.85,
+                "transmission_efficiency": 0.95,
+                "friction_torque_nm": 25.0,
+            },
+            "records": [
+                {"measured_rate_m3d": 16.5, "total_dp_pa": 2.0e6, "temperature_c": 55.0, "speed_rpm": 100.0},
+                {"measured_rate_m3d": 19.2, "total_dp_pa": 3.5e6, "temperature_c": 58.0, "speed_rpm": 120.0},
+                {"measured_rate_m3d": 23.4, "total_dp_pa": 4.0e6, "temperature_c": 60.0, "speed_rpm": 150.0},
+                {"measured_rate_m3d": 22.1, "total_dp_pa": 5.0e6, "temperature_c": 62.0, "speed_rpm": 150.0},
+                {"measured_rate_m3d": 32.0, "total_dp_pa": 4.5e6, "temperature_c": 61.0, "speed_rpm": 200.0},
+            ],
+            "alpha_grid": [0.6, 0.8, 1.0],
+            "snapshot": {
+                "speed_rpm": 150.0,
+                "temperature_c": 60.0,
+                "intake_pressure_pa": 3.0e6,
+                "discharge_pressure_pa": 7.0e6,
+                "electrical_power_w": None,
+            },
+        }
+
+    def test_compute_returns_calibration_and_result(self) -> None:
+        from espcp_metering.webapp import compute
+
+        out = compute(self._payload())
+        assert out["calibration"]["k_dp"] >= 0.0
+        result = out["result"]
+        assert 0.0 < result["rate_m3d"] < result["theoretical_rate_m3d"]
+        assert result["dp_source"] == "measured"
+
+    def test_compute_power_fallback(self) -> None:
+        from espcp_metering.webapp import compute
+
+        payload = self._payload()
+        payload["snapshot"]["intake_pressure_pa"] = None
+        payload["snapshot"]["discharge_pressure_pa"] = None
+        payload["snapshot"]["electrical_power_w"] = 8000.0
+        out = compute(payload)
+        assert out["result"]["dp_source"] == "power_fallback"
+
+    def test_compute_invalid_payload_raises(self) -> None:
+        from espcp_metering.webapp import compute
+
+        payload = self._payload()
+        payload["records"] = payload["records"][:1]  # 标定至少 2 条
+        with pytest.raises(ValueError):
+            compute(payload)
+
+
 class TestDigitalMetering:
     @pytest.fixture
     def model(

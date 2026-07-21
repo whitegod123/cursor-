@@ -34,7 +34,20 @@
 pip install -r requirements.txt      # 仅测试需要 pytest，运行时零依赖
 python examples/demo_metering.py     # 端到端演示：标定 → 计产 → 校核/降级
 python -m pytest tests/ -v           # 单元测试
+python -m espcp_metering.webapp      # 网页界面 http://127.0.0.1:8000
 ```
+
+## 网页界面
+
+`python -m espcp_metering.webapp [端口]` 启动后浏览器打开，页面提供：
+
+- 泵结构参数、井液黏度（高含水乳化液）、扭矩-功率模型配置；
+- 单量测试标定记录表格录入（现场单位：MPa、mPa·s、kW）；
+- 实时数据计产：产液量、理论排量、漏失量、容积效率、压差来源
+  （实测 / 电参数降级）与负载校核结果。
+
+后端为无状态 JSON API（`POST /api/estimate`，SI 单位），可直接对接
+SCADA 或生产数据库做批量计产。
 
 最小使用示例：
 
