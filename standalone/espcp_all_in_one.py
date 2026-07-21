@@ -1134,9 +1134,16 @@ class _Handler(BaseHTTPRequestHandler):
         sys.stderr.write(f"{self.address_string()} - {fmt % args}\n")
 
 
-def serve(port: int = 8000) -> None:
+def serve(port: int = 8000, open_browser: bool = False) -> None:
     server = ThreadingHTTPServer(("127.0.0.1", port), _Handler)
-    print(f"电潜螺杆泵数字计产界面已启动：http://127.0.0.1:{port}")
+    url = f"http://127.0.0.1:{port}"
+    print(f"电潜螺杆泵数字计产界面已启动：{url}")
+    print("按 Ctrl+C 停止。")
+    if open_browser:
+        import threading
+        import webbrowser
+
+        threading.Timer(0.5, lambda: webbrowser.open(url)).start()
     try:
         server.serve_forever()
     except KeyboardInterrupt:
@@ -1251,7 +1258,12 @@ if __name__ == "__main__":
     elif len(sys.argv) >= 2 and sys.argv[1] == "demo":
         demo()
     else:
-        print(__doc__.split("═")[0])
-        print("用法：")
-        print("  python3 espcp_all_in_one.py demo        # 端到端演示")
-        print("  python3 espcp_all_in_one.py web [端口]  # 网页界面")
+        # 不带参数直接运行（PyCharm 点运行 / 双击）：
+        # 先跑一遍演示证明模型可用，再启动网页界面并自动打开浏览器
+        print("═" * 56)
+        print(" 电潜螺杆泵产液量数字计产模型")
+        print(" （直接运行模式：先演示计算，后启动网页界面）")
+        print("═" * 56 + "\n")
+        demo()
+        print("═" * 56)
+        serve(8000, open_browser=True)
