@@ -82,7 +82,7 @@ set_cn_font(r, name_cn="黑体", size=20, bold=True, color=ACCENT)
 
 st = doc.add_paragraph()
 st.alignment = WD_ALIGN_PARAGRAPH.CENTER
-r = st.add_run("结论 → 相关开源 → 怎么迁移 → 辅助工具")
+r = st.add_run("结论 → 相关开源（可迁移） → 怎么迁移 → 辅助工具 → 附录（非计产）")
 set_cn_font(r, size=12, color=GRAY)
 
 d = doc.add_paragraph()
@@ -221,6 +221,40 @@ B(doc, "导出本井「泵参数 + 试井产量」对齐表，按 3.2 列好特�
 B(doc, "完成结构 A 训练与盲测；误差可接受再上结构 B。", bold_prefix="下一步：")
 P(doc, "一句话回顾：没有螺杆泵专用开源计产 NN → 用通用 VFM 开源（首选 LSTM-for-Production）"
        "→ 特征换成泵工况、标签用试井产量重新训练 → 有条件做成「理论排量 − 网络滑脱」。", bold=True)
+
+# ==================== 6 附录：螺杆泵相关但非计产 ====================
+H(doc, "六、附录：螺杆泵相关开源（非计产，勿与第二章混淆）", 1)
+P(doc, "检索时还会碰到一批名字带「螺杆泵 / PCP」的开源仓库。"
+       "它们做的是故障诊断、几何设计、资产管理等，不是「工况→产量」的神经网络计产。"
+       "列在此处以免遗漏，也避免误当成计产模型使用。")
+T(doc,
+  ["项目", "地址", "实际做什么", "能否当计产用"],
+  [
+      ["pump_ai_software（螺杆泵AI软件）",
+       "github.com/xiansurfer/pump_ai_software",
+       "宏观控制图（扭矩/泵效）、故障预警、生存分析；国内油田泵故障数据",
+       "否（故障诊断）"],
+      ["ScrewPumpCalculator",
+       "github.com/aiguoli/ScrewPumpCalculator",
+       "螺杆泵参数计算与型线设计（SolidWorks 二次开发）",
+       "否（几何设计）"],
+      ["PCP-Tracker-Project",
+       "github.com/Mabubakr86/PCP-Tracker-Project",
+       "螺杆泵资产跟踪桌面应用",
+       "否（资产管理）"],
+      ["progressive-cavity-pump（OpenSCAD）",
+       "github.com/Rmurthy1/progressive-cavity-pump",
+       "泵三维几何建模",
+       "否"],
+      ["accapumps/progressive-cavity-pumps",
+       "github.com/accapumps/progressive-cavity-pumps",
+       "泵研究资料仓库",
+       "否"],
+  ],
+  widths=[3.8, 4.8, 5.0, 2.4])
+P(doc, "若业务同时需要「计产 + 故障诊断」，可并行使用：计产走第二章迁移路径；"
+       "故障诊断可参考 pump_ai_software 的控制图与预警思路。二者输入传感器有重叠"
+       "（转速、扭矩、电流），但训练标签不同（产量 vs 故障类别），不能混成一个模型。")
 
 out1 = "/workspace/开源螺杆泵井神经网络计产模型调研报告.docx"
 out2 = "/workspace/油田计产神经网络模型开源资源调研报告.docx"
